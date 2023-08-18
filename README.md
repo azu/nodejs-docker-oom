@@ -2,6 +2,8 @@
 
 ## Usage
 
+- Define: `"packageManager": "npm@9.5.1"`
+
 ```bash
 $ docker build -t nodejs-docker-oom .
 $ make test
@@ -36,4 +38,40 @@ make: *** [test] Error 134
 
 $ echo $?
 2
+```
+
+## Npm 6 + corepack + Jest Exit Status bug
+
+- Define: `"packageManager": "npm@6.14.16"`
+
+```mermaid
+$ docker build -t nodejs-docker-oom .
+$ make test
+docker run -e NODE_ENV=test --rm nodejs-docker-oom npm test
+
+> nodejs-docker-oom@1.0.0 test /
+> jest --runInBand --silent=false --verbose --detectOpenHandles --forceExit test.js
+
+FAIL home/node/.cache/node/corepack/npm/6.14.16/lib/test.js
+  ● Test suite failed to run
+
+    Your test suite must contain at least one test.
+
+      at onResult (node_modules/@jest/core/build/TestScheduler.js:175:18)
+      at node_modules/@jest/core/build/TestScheduler.js:304:17
+      at node_modules/emittery/index.js:260:13
+          at Array.map (<anonymous>)
+      at Emittery.Typed.emit (node_modules/emittery/index.js:258:23)
+
+e
+<--- Last few GCs --->
+
+[18:0xffffa22e9300]     2647 ms: Mark-sweep 324.3 (359.0) -> 293.9 (355.7) MB, 151.3 / 0.0 ms  (+ 0.4 ms in 113 steps since start of marking, biggest step 0.1 ms, walltime since start of marking 670 ms) (average mu = 0.935, current mu = 0.917) allocation [18:0xffffa22e9300]     7474 ms: Mark-sweep 1844.9 (1883.4) -> 1843.8 (1883.4) MB, 714.7 / 0.0 ms  (+ 0.0 ms in 1 steps since start of marking, biggest step 0.0 ms, walltime since start of marking 1163 ms) (average mu = 0.869, current mu = 0.852) allocati
+
+<--- JS stacktrace --->
+
+FATAL ERROR: invalid table size Allocation failed - JavaScript heap out of memory
+
+$ echo $?
+0
 ```

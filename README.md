@@ -2,6 +2,8 @@
 
 ## Usage
 
+### npm 9 exit status fine
+
 - Define: `"packageManager": "npm@9.5.1"`
 
 ```bash
@@ -40,11 +42,11 @@ $ echo $?
 2
 ```
 
-## Npm 6 + corepack + Jest Exit Status bug
+## npm 6 + corepack + Jest Exit Status bug
 
 - Define: `"packageManager": "npm@6.14.16"`
 
-```mermaid
+```bash
 $ docker build -t nodejs-docker-oom .
 $ make test
 docker run -e NODE_ENV=test --rm nodejs-docker-oom npm test
